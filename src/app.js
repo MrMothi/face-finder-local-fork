@@ -6,7 +6,9 @@ import * as faceapi from "face-api.js";
 import { v4 as uuidv4 } from 'uuid';
 
 export default function App() {
+    //useState for setting the face api loaded variable (orignally false)
     const [modelsLoaded, setModelsLoaded] = React.useState(false);
+    //useEffect for loading the models (part of setting up the faceapi and its assets) 
     React.useEffect(() => {
         const loadModels = async () => {
             const MODEL_URL = process.env.PUBLIC_URL + "/models";
@@ -20,6 +22,7 @@ export default function App() {
         loadModels();
     }, []);
 
+    //several useStates for various variables, many are booleans for form functionality, keeping track of the images and more
     const [showImg, toggleImgDisplay] = React.useState(false);
     const [showFileLoader, toggleFileLoader] = React.useState(true);
     const [showForm, toggleForm] = React.useState(false);
@@ -35,11 +38,13 @@ export default function App() {
     const [checked, isChecked] = React.useState(false);
     const [retPrompt, setRetPrompt] = React.useState("");
 
+    //loads images stored in session storage into the image array (offline version uses sessionstorage instead of serverside)
     React.useEffect(() => {
         const imgNames = Object.keys(sessionStorage);
         setSavedImgs(imgNames);
     }, []);
 
+    //array which holds the messages which will be shown on screen according to the situation
     const messages = [
         "Sorry, face not detected. Please try another image",
         "Face detected!",
@@ -48,7 +53,8 @@ export default function App() {
 
     //variable for the name regex
     const regexNameInput = /^[a-z A-Z]+$/g; //allows only characters and spaces, checks globally, ^ and $ check for whole line (^ anchor for begining, $ anchor for end)
-
+    
+    //function for showing the image within the upload area
     function displayImg(props) {
         toggleFileLoader(false);
         checkLoad(true);
@@ -58,6 +64,7 @@ export default function App() {
         reader.onload = () => {
             getImg(reader.result);
         };
+        //following are functions which require the faceapi to be loaded
         if (modelsLoaded) {
             getFace(file).then((faces) => {
                 checkNumFaces(faces);
@@ -68,6 +75,7 @@ export default function App() {
         }
     }
 
+    //function to check if the face is valid (faces.length: if 1 it is valid, 2 if not a valid face)
     function checkNumFaces(faces) {
         if (faces.length === 1 && sessionStorage.length > 0) {
             canCheck(true);
@@ -81,7 +89,8 @@ export default function App() {
             getNumFaces(faces.length);
         }
     }
-
+    
+    //checks session storage to see if the current file uploaded has the same data, does not add if there is a duplicate 
     function checkDuplicate() {
         const imgNames = Object.keys(sessionStorage);
         const storedImgs = []
@@ -97,6 +106,7 @@ export default function App() {
         }
     }
 
+    //function for the remove img button, which clears the form and resets boolean variables
     function removeImg() {
         toggleImgDisplay(false);
         toggleFileLoader(true);
@@ -108,6 +118,7 @@ export default function App() {
         canAdd(false);
     }
 
+    //main function called when all other conditions are met, runs the faceapi with the image then appropriately returns the prompt and result
     function checkImg() {
         isChecked(true);
         canCheck(false);
@@ -141,10 +152,11 @@ export default function App() {
         }
     }
 
+    //funciton to add the image to session storage if conditions are met (ie if face is recognised)
     function addImg() {
         if (showForm === true) {
             toggleForm(false);
-            checked || sessionStorage.length === 0
+            checked || sessionStorage.length === 0   //sessionstorage === 0  is a check for when there is no images (incase of first time loading or deleting old files)
                 ? canCheck(false)
                 : canCheck(true);
         } else {
@@ -152,7 +164,8 @@ export default function App() {
             canCheck(false);
         }
     }
-
+    
+    //adds the image to session storage 
     function addImgToStorage(e) {
         e.preventDefault();
         let face = JSON.stringify(currFace[0].descriptor);
@@ -175,6 +188,7 @@ export default function App() {
         });
     }
 
+    //
     function changeName(props) {
         //setting temp variable
         let tempName = props.target.value;
@@ -188,6 +202,7 @@ export default function App() {
         }
     }
 
+    //function used from the image card button that deletes the image from sessionstorage and its associated card on display
     function removeSavedImg(props) {
         setSavedImgs((currImgs) => {
             let currImgsCopy = [...currImgs];
@@ -200,6 +215,7 @@ export default function App() {
         sessionStorage.removeItem(props.target.id);
     }
 
+    //function used when calling the 
     async function getFace(file) {
         const img = await faceapi.bufferToImage(file);
         const detections = await faceapi
@@ -209,6 +225,8 @@ export default function App() {
         return detections;
     }
 
+    //functional component which is the formatted card that is used to display the previously uploaded images
+    //these cards are displayed using the map function, they move dynamically 
     function ImgCards() {
         return (
             <Container
@@ -249,6 +267,7 @@ export default function App() {
                                                     )}
                                                     alt={`An image of ${image}`}
                                                 />
+                                                {/* Button for removing the image and its card from session storage and display*/}
                                                 <Button
                                                     id={image}
                                                     className="btn-sm btn-danger mt-3"
@@ -268,11 +287,14 @@ export default function App() {
         );
     }
 
+    //visual component of the code below
     return (
         <main>
             <h1 className="text-center text-warning mb-5 pt-3" id="title">
                 FACE FINDER LOCAL
             </h1>
+            
+            {/* The following container is where the user will upload their image */}
             <Container
                 fluid
                 className="text-center border border-warning h-50 w-25 align-items-center d-flex justify-content-center p-0"
@@ -303,6 +325,7 @@ export default function App() {
                 ></div>
             </Container>
 
+            {/* The following container is for the buttons which can remove the image, add the image to dataset/sessionstorage, check the image*/}
             <Container
                 fluid
                 className="d-flex justify-content-center w-50 mt-3"
@@ -337,7 +360,8 @@ export default function App() {
                     </Col>
                 </Row>
             </Container>
-
+            
+            {/* This h2 is used to display the result or error */}
             <h2
                 className={`text-center mt-4 ${
                     !showForm ? "d-block" : "d-none"
@@ -349,6 +373,8 @@ export default function App() {
                     ? retPrompt
                     : ""}
             </h2>
+            
+            
             <Container
                 fluid
                 className={`d-flex justify-content-center my-4 w-75 ${
@@ -368,6 +394,7 @@ export default function App() {
                             title="Use only alphabetical letters"
                         />
                     </Form.Group>
+                    {/* Button for trying to submit the uploaded image */}
                     <button
                         className="btn btn-warning col-lg-4 col-md-6"
                         type="submit"
