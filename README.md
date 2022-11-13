@@ -23,3 +23,4 @@ when the window focus in in the markdown file
 use 'cntrl-shift-v' for windows, or 'cmd-shift-v' for macOS
 
 [Markdown Syntax Documentation](https://www.markdownguide.org/basic-syntax/)
+[https://face-finder-am.herokuapp.com/ <-- link to the nonlocal version, github page https://github.com/abhin-T/face-finder]
