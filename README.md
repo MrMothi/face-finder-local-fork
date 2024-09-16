@@ -22,6 +22,4 @@ install the markdown viewing extension (markdown preview enhanced |or| markdown 
 when the window focus in in the markdown file
 use 'cntrl-shift-v' for windows, or 'cmd-shift-v' for macOS
 
-[Markdown Syntax Documentation](https://www.markdownguide.org/basic-syntax/)
-
 Main repository this was forked from: [Git Repo](https://github.com/abhin-T/face-finder-local)
