@@ -1,6 +1,6 @@
 # Face Finder Local
 
-**_Created By Abhin & Mohit_**
+**_Created By [Abhin](https://github.com/abhin-T) & Mohit_**
 
 **Project Begun on Aug 8th 2022**
 
@@ -27,4 +27,4 @@ use 'cntrl-shift-v' for windows, or 'cmd-shift-v' for macOS
 *NOTE: APP IS NOT CURRENTLY HOSTED\*
 https://face-finder-am.herokuapp.com/ <-- link to the nonlocal version
 
-Main Repo this was forked from: github page https://github.com/abhin-T/face-finder
+Main repository this was forked from: [Git Repo](https://github.com/abhin-T/face-finder-local)
