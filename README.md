@@ -24,4 +24,5 @@ use 'cntrl-shift-v' for windows, or 'cmd-shift-v' for macOS
 
 [Markdown Syntax Documentation](https://www.markdownguide.org/basic-syntax/)
 
+*NOTE: APP IS NOT CURRENTLY HOSTED\*
 https://face-finder-am.herokuapp.com/ <-- link to the nonlocal version, github page https://github.com/abhin-T/face-finder
