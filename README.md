@@ -4,7 +4,7 @@
 
 **Project Begun on Aug 8th 2022**
 
-This web application is built using the React framework, along with various libaries such as
+This web application is built using the React framework, along with various libraries such as
 Bootstrap. We use a face sorting algorithm from "https://justadudewhohacks.github.io/face-api.js/docs/index.html" 
 to help our application to allow users to upload an image to determine who the celebrity is then displays it to the user.
 
